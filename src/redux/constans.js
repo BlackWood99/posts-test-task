@@ -1,0 +1,13 @@
+export const GET_POSTS = "POSTS/GET_POSTS"
+export const IS_LOADING = "POSTS/IS_LOADING"
+
+export const GET_CURR_POST = "POST/GET_CURR_POST"
+export const IS_LOADING_POST = "POST/IS_LOADING_POST"
+export const SET_ERROR_POST = "POST/SET_ERROR"
+
+export const SIGN_UP = "AUTH/SIGH_UP"
+export const SIGN_OUT = "AUTH/SIGH_OUT"
+export const SET_ERROR_AUTH = "AUTH/SET_ERROR_AUTH"
+
+export const LOGIN = "LOGIN/LOGIN"
+export const SET_ERROR_LOGIN = "LOGIN/SET_ERROR_LOGIN"

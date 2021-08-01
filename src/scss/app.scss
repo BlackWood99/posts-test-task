@@ -1,0 +1,102 @@
+
+
+.container {
+	width: 100%;
+	max-width: 980px;
+	margin: 0 auto;
+}
+
+.error {
+	color: red;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.main-content {
+	background-color: rgb(245, 241, 241);
+	padding: 1rem;
+	min-height: calc(100vh - 64px);
+	height: 100%;
+}
+
+.header {
+	background-color: rgb(6, 73, 82);
+	&-container {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 1rem 0;
+
+		.header-left {
+			.post-create_link {
+				margin-left: 1rem;
+				color: rgb(111, 121, 209);
+				text-decoration: underline;
+			}
+		}
+
+		.logo {
+			color: #fff;
+			font-size: 1.5rem;
+			font-weight: 500;
+			text-transform: uppercase;
+		}
+
+		.auth {
+			a {
+				color: #fff;
+				margin-left: 1rem;
+			}
+		}
+		
+	}
+}
+
+.allPosts {
+	.posts-list {
+		margin-top: 1rem;
+	}
+	.post-item {
+		padding: 1rem;
+        margin-top: 1rem;
+		border: 1px solid rgb(199, 199, 199);
+		border-radius: 0.5rem;
+	}
+}
+
+.onePost {
+	padding: 2rem 0;
+	.post {
+		margin-bottom: 2rem;
+		border-bottom: 1px solid #f2f2f2;
+		&-textarea {
+			resize: none;
+			outline: none;
+
+			width: 100%;
+			padding: 0.2rem;
+		}
+		.btn-save {
+			padding: 0.2rem 1rem;
+		}
+		&-actions {
+			margin: 1.5rem 0;
+			button {
+				padding: .3rem 1rem;
+			}
+		}
+	}
+	.comments {
+		h2 {
+			font-size: 21px;
+			margin-bottom: 1rem;
+		}
+		.comment-list {
+
+			&_item {
+				padding: 1rem 0;
+				margin-bottom: 1rem;
+			}
+		}
+	}
+}

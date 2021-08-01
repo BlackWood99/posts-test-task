@@ -1,23 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import './scss/app.scss';
+import { Route, Switch } from "react-router-dom"
+import Header from './components/Header';
+import AllPosts from './scss/pages/AllPosts/AllPosts';
+import OnePost from './scss/pages/OnePost/OnePost';
+import CreatePost from './scss/pages/CreatePost/CreatePost';
+import Registration from './scss/pages/Registration/Registration';
+import Login from './scss/pages/Login/Login';
+import { getPosts, getTokenAC } from './redux/actions';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 
 function App() {
+
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getPosts())
+  }, [dispatch])
+  
+  useEffect(() => {
+    const token = localStorage.getItem("token")
+    dispatch(getTokenAC(token))
+  }, [dispatch])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <main className="main">
+        <div className="container">
+          <div className="main-content">
+            <Switch>
+              <Route path="/" component={AllPosts} exact />
+              <Route path="/posts/:id" component={OnePost} exact />
+              <Route path="/createPost" component={CreatePost} exact />
+              <Route path="/register" component={Registration} exact />
+              <Route path="/login" component={Login} exact />
+            </Switch>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
