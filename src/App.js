@@ -1,11 +1,11 @@
 import './scss/app.scss';
 import { Route, Switch } from "react-router-dom"
 import Header from './components/Header';
-import AllPosts from './scss/pages/AllPosts/AllPosts';
-import OnePost from './scss/pages/OnePost/OnePost';
-import CreatePost from './scss/pages/CreatePost/CreatePost';
-import Registration from './scss/pages/Registration/Registration';
-import Login from './scss/pages/Login/Login';
+import AllPosts from './pages/AllPosts/AllPosts';
+import OnePost from './pages/OnePost/OnePost';
+import CreatePost from './pages/CreatePost/CreatePost';
+import Registration from './pages/Registration/Registration';
+import Login from './pages/Login/Login';
 import { getPosts, getTokenAC } from './redux/actions';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';

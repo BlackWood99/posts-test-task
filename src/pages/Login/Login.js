@@ -2,58 +2,41 @@ import React from "react"
 import { useEffect } from "react"
 import { useState } from "react"
 import { Field, Form } from "react-final-form"
-import { connect, useDispatch } from "react-redux"
+import { connect } from "react-redux"
 import { Redirect } from "react-router"
-import { authErrorAC, signUp } from "../../../redux/actions"
+import { login } from "../../redux/actions"
 
-const Registration = (props) => {
-	const [authError, setAuthError] = useState(props.error)
+const Login = (props) => {
+	const [loginError, setLoginError] = useState(props.error)
 	useEffect(() => {
-		setAuthError(props.error)
+		setLoginError(props.error)
 	}, [props.error])
 
-	const dispatch = useDispatch()
 	const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-	const clearErr = (ms) =>
-		setTimeout(() => {
-			dispatch(authErrorAC())
-		}, ms)
 
 	const onSubmit = async (values) => {
 		await sleep(300)
-		if (values.password !== values.confirmPassword) {
-			return { confirmPassword: "Passwords is not equal" }
-		} else {
-			const regData = {
-				name: values.login,
-				email: values.email,
-				password: values.password,
-				password_confirmation: values.confirmPassword,
-			}
-			props.signUp(regData)
+
+		const loginData = {
+			email: values.email,
+			password: values.password,
 		}
-		clearErr(5000)
+		props.login(loginData)
 	}
 
 	if (props.token) return <Redirect to='/' />
 
 	return (
-		<section className='signUp'>
+		<section className='login'>
 			<Form
 				onSubmit={onSubmit}
 				validate={(values) => {
 					const errors = {}
-					if (!values.login) {
-						errors.login = "Required"
-					}
 					if (!values.email) {
 						errors.email = "Required"
 					}
 					if (!values.password) {
 						errors.password = "Required"
-					}
-					if (!values.confirmPassword) {
-						errors.confirmPassword = "Required"
 					}
 					return errors
 				}}
@@ -66,18 +49,6 @@ const Registration = (props) => {
 					values,
 				}) => (
 					<form onSubmit={handleSubmit}>
-						<Field name='login'>
-							{({ input, meta }) => (
-								<div>
-									<label>Login</label>
-									<input {...input} type='text' placeholder='Login' />
-									{(meta.error || meta.submitError) &&
-										meta.touched && (
-											<span>{meta.error || meta.submitError}</span>
-										)}
-								</div>
-							)}
-						</Field>
 						<Field name='email'>
 							{({ input, meta }) => (
 								<div>
@@ -105,27 +76,11 @@ const Registration = (props) => {
 								</div>
 							)}
 						</Field>
-						<Field name='confirmPassword'>
-							{({ input, meta }) => (
-								<div>
-									<label>Confirm password</label>
-									<input
-										{...input}
-										type='password'
-										placeholder='Confirm password'
-									/>
-									{(meta.error || meta.submitError) &&
-										meta.touched && (
-											<span>{meta.error || meta.submitError}</span>
-										)}
-								</div>
-							)}
-						</Field>
-						<span className='error'>{authError}</span>
+						<span className='error'>{loginError}</span>
 						{submitError && <div className='error'>{submitError}</div>}
 						<div className='buttons'>
 							<button type='submit' disabled={submitting}>
-								Sign up
+								Login
 							</button>
 							<button
 								type='button'
@@ -145,10 +100,10 @@ const Registration = (props) => {
 const mapStateToProps = (state) => {
 	return {
 		token: state.auth.token,
-		error: state.auth.error,
+		error: state.auth.errorLogin,
 	}
 }
 
-const mapDispatchToProps = { signUp }
+const mapDispatchToProps = { login }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Registration)
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

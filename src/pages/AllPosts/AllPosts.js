@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { connect } from "react-redux"
 
-import Post from "../../../components/Post"
+import Post from "../../components/Post"
 
 const AllPosts = (props) => {
 

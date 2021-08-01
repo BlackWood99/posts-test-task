@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react"
 import { connect } from "react-redux"
 import { useHistory } from "react-router"
-import Comment from "../../../components/Comment"
-import { deletePost, editPost, getCurrPost } from "../../../redux/actions"
+import Comment from "../../components/Comment"
+import { deletePost, editPost, getCurrPost } from "../../redux/actions"
 
 const OnePost = (props) => {
 	const history = useHistory()

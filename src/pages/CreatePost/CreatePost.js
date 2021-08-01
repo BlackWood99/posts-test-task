@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router'
-import { createPost } from '../../../redux/actions'
+import { createPost } from '../../redux/actions'
 
 const CreatePost = () => {
 
