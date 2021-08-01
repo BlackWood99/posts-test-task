@@ -7,13 +7,15 @@ const initialState = {
     errorLogin: null
 }
 
+const myUserId = 46
+
 export const authReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case SIGN_UP: {
 			return {
 				...state,
 				token: action.payload,
-				userId: 46,
+				userId: myUserId,
 			}
 		}
 		case SIGN_OUT: {
@@ -34,7 +36,7 @@ export const authReducer = (state = initialState, action) => {
 			return {
 				...state,
 				token: action.payload,
-				userId: 46,
+				userId: myUserId,
 			}
 		}
         case SET_ERROR_LOGIN: {
