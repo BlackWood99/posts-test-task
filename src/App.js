@@ -25,8 +25,8 @@ function App() {
     if (localStorage.getItem("token")) {
       const token = localStorage.getItem("token")
       dispatch(getTokenAC(token))
-      console.log("APP localStorage token: ", token)
-      console.log("APP state token: ", stateToken)
+      // console.log("APP localStorage token: ", token)
+      // console.log("APP state token: ", stateToken)
     }
 
   }, [dispatch, stateToken])

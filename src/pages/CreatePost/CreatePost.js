@@ -24,7 +24,7 @@ const CreatePost = () => {
         <section className="createPost">
             <h1>Create post</h1>
             <div>
-                <input type="text" value={postText} onChange={(e) => handeChange(e)} />
+                <textarea className='textarea-createPost' value={postText} onChange={(e) => handeChange(e)} />
                 <button onClick={() => onCreatePost()}>Create</button>
             </div>
         </section>

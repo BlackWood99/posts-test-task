@@ -9,45 +9,29 @@ import {
 	SIGN_OUT,
 	SIGN_UP,
 } from "./constans"
-//import { store } from "./store"
 
-// const _token = localStorage.getItem("token")
-// const stateToken = store.getState().auth.token
-// console.log("Actions, local: ", localStorage.getItem("token"))
+const API_URI = "http://test.flcd.ru/api"
 
-const instance = axios.create({
-	baseURL: "http://test.flcd.ru/api",
-})
+export default function authHeader() {
+	const _token = localStorage.getItem("token")
 
-let instanceWithToken = axios.create({
-	baseURL: "http://test.flcd.ru/api",
-	headers: {
-		Authorization: `Bearer ${localStorage.getItem("token")}`,
-	},
-})
+	if (_token) {
+		return { Authorization: "Bearer " + _token }
+	} else {
+		return {}
+	}
+}
+
+// const instance = axios.create({
+// 	baseURL: "http://test.flcd.ru/api",
+// })
 
 // let instanceWithToken = axios.create({
 // 	baseURL: "http://test.flcd.ru/api",
-// 	timeout: 1000,
-// 	// Static headers
-	
-// 	transformRequest: [
-// 		function (data, headers) {
-// 			// You may modify the headers object here
-// 			headers["Authorization"] = `Bearer ${localStorage.getItem("token")}`
-// 			console.log("data: ", data)
-// 			// Do not change data
-
-// 			return data
-// 		},
-// 	],
+// 	headers: {
+// 		Authorization: `Bearer ${localStorage.getItem("token")}`,
+// 	},
 // })
-
-// const testFetch = () => {
-// 	const url = "http://test.flcd.ru/api/post"
-// 	let tokenStr = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYzcyM2U2NmU3ZjZkZDBjMjJjMWU3YTZmODZkODVkNTI4MjE4M2E5M2JmY2RjMGQ4NGRmMjkzMzIwMGNkYjcyZGNhYTUzZGRjM2EwYTQyNmQiLCJpYXQiOjE2Mjc4MzU2OTEuMzQ2NDU0LCJuYmYiOjE2Mjc4MzU2OTEuMzQ2NDYsImV4cCI6MTY1OTM3MTY5MS4xMjQ0Mywic3ViIjoiNDYiLCJzY29wZXMiOltdfQ.qHGMa3cqI8X5S-M04PgVUoK3p4W6dsHvZcdjyMblH8BYsL8zgtpAh38DsLZBho-4e9PD7pXOq2WDiTX9geRToM-k5SolufsmOHrw7wcWBlQ8Ezv_YuDmo7GFTsTW6-SADiMbl9RefOJ2atO0DGHAsfrVIqnL1cz6FGtKl_6yxq1yHwr5QzL97vH2a_OK3VGTOAZTfe3A3b2eHhLwSaaFq4qiJDcH-E1cyrgIo7pXJIffb7Q4uEjDGZ1wlvHz0tSWLGoczDFJ_vQHTqcYuT_gseMHGWhAqLg9Jb8PWNWj7idYBDNGen-eQE89tD4paq-lLAYBekhvKTV2Cj1G6_7FPHsvw0COuXDGRiuF6iSuMVdSkBbB9HBYPbCm_3wn4TWXLF2tG5ml6ETr3oIB3WghuPKnNsqumtU13a4pFjiFZKRLbzbn3zF1wgl3MDAArbsM7IB5JT_a88FLTg-dtq5gRaOlLGrcVmUdq0a_SKuuCVUE8XYQ9NZ1cgSg06gr_Ea8MO0DvQhEO27nd5PgQqivHTmxFA-avqVCfV898plBpztSFmr2QuxFkw5aPWcdlyltqXKucs0nRGtO24Rf5uSKMysfr2wH-jOQ9bXD4WV_nkaIzGFlV5pxoTF6yx0ZGPhWqKqIvxhPOJf_D3aFt3HIqmsHRgcnPtHBvXrbrx0IPus';
-// 	axios.post(url, {text: "qwertttttty"}, { headers: {"Authorization" : `Bearer ${tokenStr}`} }).then(res => console.log(res))
-// }
 
 // -------------- POSTS
 
@@ -68,7 +52,7 @@ const loadingPostsAC = (isLoading) => {
 export const getPosts = () => async (dispatch) => {
 	try {
 		dispatch(loadingPostsAC(true))
-		const res = await instance.get("/post")
+		const res = await axios.get(`${API_URI}/post`)
 		if (res.status === 200) {
 			dispatch(getPostsAC(res.data))
 		}
@@ -97,7 +81,7 @@ const loadingCurrPostAC = (isLoading) => {
 export const getCurrPost = (id) => async (dispatch) => {
 	try {
 		dispatch(loadingCurrPostAC(true))
-		const res = await instance.get(`/post/${id}`)
+		const res = await axios.get(`${API_URI}/post/${id}`)
 		if (res.status === 200) {
 			dispatch(getCurrPostAC(res.data))
 		}
@@ -108,16 +92,8 @@ export const getCurrPost = (id) => async (dispatch) => {
 }
 
 export const createPost = (post) => async (dispatch) => {
-	// try {
-	// 	const res = await instanceWithToken.post(`/post`, post)
-	// 	if (res.status === 200) {
-	// 		dispatch(getPosts())
-	// 	}
-	// } catch (error) {
-	// 	console.log("ERROR: " + error)
-	// }
-	instanceWithToken
-		.post("/post", post)
+	axios
+		.post(`${API_URI}/post`, post, { headers: authHeader() })
 		.then((res) => {
 			if (res.status === 200) dispatch(getPosts())
 		})
@@ -126,7 +102,9 @@ export const createPost = (post) => async (dispatch) => {
 
 export const deletePost = (postId) => async (dispatch) => {
 	try {
-		const res = await instanceWithToken.delete(`/post/${postId}`)
+		const res = await axios.delete(`${API_URI}/post/${postId}`, {
+			headers: authHeader(),
+		})
 		if (res.status === 200) {
 			dispatch(getPosts())
 		}
@@ -137,10 +115,13 @@ export const deletePost = (postId) => async (dispatch) => {
 
 export const editPost = (postId, postText) => async (dispatch) => {
 	try {
-		console.log(localStorage.getItem("token"))
-		const res = await instanceWithToken.patch(`/post/${postId}`, {
-			text: postText,
-		})
+		const res = await axios.patch(
+			`${API_URI}/post/${postId}`,
+			{
+				text: postText,
+			},
+			{ headers: authHeader() }
+		)
 		if (res.status === 200) {
 			dispatch(getPosts())
 		}
@@ -167,9 +148,8 @@ export const authErrorAC = (error) => {
 
 export const signUp = (authData) => async (dispatch) => {
 	try {
-		const res = await instance.post(`/register`, authData)
+		const res = await axios.post(`${API_URI}/register`, authData)
 		if (res.status === 200) {
-			localStorage.removeItem("token")
 			localStorage.setItem("token", res.data.token)
 			dispatch(getTokenAC(res.data))
 		} else {
@@ -197,9 +177,8 @@ const loginErrorAC = (error) => {
 
 export const login = (loginData) => async (dispatch) => {
 	try {
-		const res = await instance.post(`/token`, loginData)
+		const res = await axios.post(`${API_URI}/token`, loginData)
 		if (res.status === 200) {
-			localStorage.removeItem("token")
 			localStorage.setItem("token", res.data.token)
 			dispatch(getTokenAC(res.data))
 		}
