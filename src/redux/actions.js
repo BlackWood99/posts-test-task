@@ -9,8 +9,10 @@ import {
 	SIGN_OUT,
 	SIGN_UP,
 } from "./constans"
+import {store} from './store'
 
 const _token = localStorage.getItem("token")
+const stateToken = store.getState().auth.token
 
 const instance = axios.create({
 	baseURL: "http://test.flcd.ru/api",
@@ -111,6 +113,7 @@ export const deletePost = (postId) => async (dispatch) => {
 
 export const editPost = (postId, postText) => async (dispatch) => {
 	try {
+		console.log(localStorage.getItem("token"))
 		const res = await instanceWithToken.patch(`/post/${postId}`, {text: postText})
 		if (res.status === 200) {
 			dispatch(getPosts())

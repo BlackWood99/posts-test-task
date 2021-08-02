@@ -57,7 +57,8 @@ const OnePost = (props) => {
 				) : (
 					<>
 						<p className='post-text'>{postText}</p>
-						{props.token && (props.post.user_id === props.userId) ? (
+						{/* {props.token && (props.post.user_id === props.userId) ? ( */}
+						{props.token ? (
 							<div className='post-actions'>
 								<button onClick={() => onOpenEditmode()}>Edit</button>
 								<button onClick={() => onDeletePost()}>Delete</button>
