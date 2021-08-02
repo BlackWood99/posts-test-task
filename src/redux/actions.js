@@ -9,21 +9,39 @@ import {
 	SIGN_OUT,
 	SIGN_UP,
 } from "./constans"
-import {store} from './store'
+//import { store } from "./store"
 
-const _token = localStorage.getItem("token")
-const stateToken = store.getState().auth.token
+// const _token = localStorage.getItem("token")
+// const stateToken = store.getState().auth.token
+// console.log("Actions, local: ", localStorage.getItem("token"))
 
 const instance = axios.create({
 	baseURL: "http://test.flcd.ru/api",
 })
 
-const instanceWithToken = axios.create({
+let instanceWithToken = axios.create({
 	baseURL: "http://test.flcd.ru/api",
 	headers: {
-		Authorization: `Bearer ${_token}`,
+		Authorization: `Bearer ${localStorage.getItem("token")}`,
 	},
 })
+
+// let instanceWithToken = axios.create({
+// 	baseURL: "http://test.flcd.ru/api",
+// 	timeout: 1000,
+// 	// Static headers
+	
+// 	transformRequest: [
+// 		function (data, headers) {
+// 			// You may modify the headers object here
+// 			headers["Authorization"] = `Bearer ${localStorage.getItem("token")}`
+// 			console.log("data: ", data)
+// 			// Do not change data
+
+// 			return data
+// 		},
+// 	],
+// })
 
 // const testFetch = () => {
 // 	const url = "http://test.flcd.ru/api/post"
@@ -90,14 +108,20 @@ export const getCurrPost = (id) => async (dispatch) => {
 }
 
 export const createPost = (post) => async (dispatch) => {
-	try {
-		const res = await instanceWithToken.post(`/post`, post)
-		if (res.status === 200) {
-			dispatch(getPosts())
-		}
-	} catch (error) {
-		console.log("ERROR: " + error)
-	}
+	// try {
+	// 	const res = await instanceWithToken.post(`/post`, post)
+	// 	if (res.status === 200) {
+	// 		dispatch(getPosts())
+	// 	}
+	// } catch (error) {
+	// 	console.log("ERROR: " + error)
+	// }
+	instanceWithToken
+		.post("/post", post)
+		.then((res) => {
+			if (res.status === 200) dispatch(getPosts())
+		})
+		.catch((err) => console.log(err.response))
 }
 
 export const deletePost = (postId) => async (dispatch) => {
@@ -114,7 +138,9 @@ export const deletePost = (postId) => async (dispatch) => {
 export const editPost = (postId, postText) => async (dispatch) => {
 	try {
 		console.log(localStorage.getItem("token"))
-		const res = await instanceWithToken.patch(`/post/${postId}`, {text: postText})
+		const res = await instanceWithToken.patch(`/post/${postId}`, {
+			text: postText,
+		})
 		if (res.status === 200) {
 			dispatch(getPosts())
 		}
@@ -143,8 +169,9 @@ export const signUp = (authData) => async (dispatch) => {
 	try {
 		const res = await instance.post(`/register`, authData)
 		if (res.status === 200) {
-			dispatch(getTokenAC(res.data))
+			localStorage.removeItem("token")
 			localStorage.setItem("token", res.data.token)
+			dispatch(getTokenAC(res.data))
 		} else {
 			dispatch(authErrorAC(res.status))
 		}
@@ -172,8 +199,9 @@ export const login = (loginData) => async (dispatch) => {
 	try {
 		const res = await instance.post(`/token`, loginData)
 		if (res.status === 200) {
-			dispatch(getTokenAC(res.data))
+			localStorage.removeItem("token")
 			localStorage.setItem("token", res.data.token)
+			dispatch(getTokenAC(res.data))
 		}
 	} catch (error) {
 		console.log("ERROR: " + error)

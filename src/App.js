@@ -7,8 +7,9 @@ import CreatePost from './pages/CreatePost/CreatePost';
 import Registration from './pages/Registration/Registration';
 import Login from './pages/Login/Login';
 import { getPosts, getTokenAC } from './redux/actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import { useState } from 'react';
 
 function App() {
 
@@ -16,11 +17,19 @@ function App() {
   useEffect(() => {
     dispatch(getPosts())
   }, [dispatch])
+
+  const stateToken = useSelector(state => state.auth.token)
+  // const [stateToken1, setStateToken1] = useState(stateToken)
   
   useEffect(() => {
-    const token = localStorage.getItem("token")
-    dispatch(getTokenAC(token))
-  }, [dispatch])
+    if (localStorage.getItem("token")) {
+      const token = localStorage.getItem("token")
+      dispatch(getTokenAC(token))
+      console.log("APP localStorage token: ", token)
+      console.log("APP state token: ", stateToken)
+    }
+
+  }, [dispatch, stateToken])
 
   return (
     <div className="App">
